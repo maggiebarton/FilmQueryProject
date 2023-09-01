@@ -3,6 +3,8 @@ package com.skilldistillery.filmquery.entities;
 import java.util.List;
 import java.util.Objects;
 
+import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
+
 public class Film {
 	private int id;
 	private String title;
@@ -15,6 +17,7 @@ public class Film {
 	private double repCost;
 	private String rating;
 	private String features;
+	private String language;
 	
 	private List<Actor> actors;
 	
@@ -151,8 +154,16 @@ public class Film {
 		this.actors = actors;
 	}
 	
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
 	public String userDisplay() {
-		return title + " Year: " + releaseYear + " Rating: " + rating + "\n" + "Description: " + desc + "\n";
+		return title + " Year: " + releaseYear + " Rating: " + rating + " Language: " + language + "\n" + "Description: " + desc + "\n";
 	}
 
 	@Override

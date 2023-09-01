@@ -11,17 +11,18 @@ import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
+	boolean quit;
 	Scanner sc = new Scanner(System.in);
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
 
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
-//		 app.test();
+//		app.test();
 		app.launch();
 	}
-//
-//  private void test() throws SQLException {
+
+	private void test() throws SQLException {
 //    Film film = db.findFilmById(1);
 //    System.out.println(film);
 //    Actor actor = db.findActorById(1);
@@ -35,7 +36,9 @@ public class FilmQueryApp {
 //	  for (Film film : films) {
 //		  System.out.println(film);
 //	}
-//  }
+
+//	 System.out.println( db.findFilmLanguage(13));
+	}
 
 	private void launch() {
 		startUserInterface();
@@ -43,11 +46,13 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface() {
-		menu();
-		int choice = sc.nextInt();
-		sc.nextLine(); // flush
+		do {
+			menu();
+			int choice = sc.nextInt();
+			sc.nextLine(); // flush
 
-		menuSwitch(choice);
+			menuSwitch(choice);
+		} while (!quit);
 
 	}
 
@@ -67,6 +72,7 @@ public class FilmQueryApp {
 			if (filmById == null) {
 				System.err.println("Film ID does not exist.");
 			} else {
+				filmById.setLanguage(db.findFilmLanguage(filmById.getId()));
 				System.out.println(filmById.userDisplay());
 			}
 			break;
@@ -77,12 +83,15 @@ public class FilmQueryApp {
 				System.err.println("No films matched your search.");
 			} else {
 				for (Film film : films) {
+					film.setLanguage(db.findFilmLanguage(film.getId()));
 					System.out.println(film.userDisplay());
 				}
 			}
 			break;
 		case 3:
 			// exit
+			System.out.println("Thanks for using the Film Query App. Goodbye!");
+			quit = true;
 			break;
 		default:
 			System.err.println("Invalid Input. Please try again.");
@@ -98,13 +107,13 @@ public class FilmQueryApp {
 		return db.findFilmById(id);
 
 	}
-	
+
 	private List<Film> filmsByKeyword() {
 		System.out.print("Enter Keyword: ");
 		String keyword = sc.nextLine();
-		
+
 		return db.findFilmsByKeyword(keyword);
-		
+
 	}
 
 }

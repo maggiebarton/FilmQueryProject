@@ -42,7 +42,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				film = new Film(); // Create the object
 
 				// map query columns to our object fields
-				
 
 				film.setId(filmResult.getInt("id"));
 				film.setTitle(filmResult.getString("title"));
@@ -100,14 +99,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> films = new ArrayList<>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASS);
-			
+
 			String sql = "SELECT * FROM film JOIN film_actor ON film.id = film_actor.film_id WHERE actor_id = ?";
-			
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorId);
-			
+
 			ResultSet rs = stmt.executeQuery();
-			
+
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String title = rs.getString("title");
@@ -144,7 +143,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
-			
+
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -169,10 +168,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		List<Film> films = new ArrayList<>();
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASS);
-			
-	//		String test = "select * from film where (title like '%data%') or (description like '%data%')";
+
+			// String test = "select * from film where (title like '%data%') or (description
+			// like '%data%')";
 			String sql = "select * from film where (title like ?) or (description like ?)";
-			
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + keyword + "%");
 			stmt.setString(2, "%" + keyword + "%");
@@ -201,5 +201,32 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 		return films;
+	}
+
+	@Override
+	public String findFilmLanguage(int filmId) {
+		String language = "";
+
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASS);
+
+			// select l.name from language l join film f on l.id = f.language_id where f.id = 13;
+			String sql = "select l.name from language l join film f on l.id = f.language_id where f.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+
+			ResultSet langResult = stmt.executeQuery();
+			if (langResult.next()) {
+				language = langResult.getString("name");
+			}
+			langResult.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return language;
 	}
 }
