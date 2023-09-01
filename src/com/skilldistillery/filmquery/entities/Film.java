@@ -150,6 +150,10 @@ public class Film {
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
 	}
+	
+	public String userDisplay() {
+		return title + " Year: " + releaseYear + " Rating: " + rating + "\n" + "Description: " + desc + "\n";
+	}
 
 	@Override
 	public String toString() {
