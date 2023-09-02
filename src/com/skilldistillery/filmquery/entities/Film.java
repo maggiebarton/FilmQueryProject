@@ -18,10 +18,11 @@ public class Film {
 	private String rating;
 	private String features;
 	private String language;
-	
+
 	private List<Actor> actors;
-	
-	public Film () {}
+
+	public Film() {
+	}
 
 	public Film(int id, String title, String desc, int releaseYear, int langId, int rentDur, double rate, int length,
 			double repCost, String rating, String features) {
@@ -38,8 +39,6 @@ public class Film {
 		this.rating = rating;
 		this.features = features;
 	}
-	
-	
 
 	public Film(int id, String title, String desc, int releaseYear, int langId, int rentDur, double rate, int length,
 			double repCost, String rating, String features, List<Actor> actors) {
@@ -153,7 +152,7 @@ public class Film {
 	public void setActors(List<Actor> actors) {
 		this.actors = actors;
 	}
-	
+
 	public String getLanguage() {
 		return language;
 	}
@@ -163,7 +162,16 @@ public class Film {
 	}
 
 	public String userDisplay() {
-		return title + " Year: " + releaseYear + " Rating: " + rating + " Language: " + language + "\n" + "Description: " + desc + "\n";
+		return title + " Year: " + releaseYear + " Rating: " + rating + " Language: " + language + "\n" + "Description: " + desc + "\nActors:\n" + actorList();
+				
+	}
+	
+	public String actorList() {
+		String actorNames = "";
+		for (Actor actor : actors) {
+			actorNames += actor.getFirstName() + " " + actor.getLastName() + "\n";
+		}
+		return actorNames;
 	}
 
 	@Override
@@ -189,7 +197,5 @@ public class Film {
 		Film other = (Film) obj;
 		return id == other.id;
 	}
-	
-	
-	
+
 }

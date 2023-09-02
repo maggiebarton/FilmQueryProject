@@ -73,6 +73,7 @@ public class FilmQueryApp {
 				System.err.println("Film ID does not exist.");
 			} else {
 				filmById.setLanguage(db.findFilmLanguage(filmById.getId()));
+				filmById.setActors(db.findActorsByFilmId(filmById.getId()));
 				System.out.println(filmById.userDisplay());
 			}
 			break;
@@ -84,6 +85,7 @@ public class FilmQueryApp {
 			} else {
 				for (Film film : films) {
 					film.setLanguage(db.findFilmLanguage(film.getId()));
+					film.setActors(db.findActorsByFilmId(film.getId()));
 					System.out.println(film.userDisplay());
 				}
 			}
