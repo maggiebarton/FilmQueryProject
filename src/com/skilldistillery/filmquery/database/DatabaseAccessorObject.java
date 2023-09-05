@@ -269,7 +269,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		try {
 			conn = DriverManager.getConnection(URL, USER, PASS);
 
-			// select f.title, ii.media_condition from film f join inventory_item ii on f.id = ii.film_id where f.id = 13;
+			// select f.title, ii.media_condition from film f join inventory_item ii on f.id
+			// = ii.film_id where f.id = 13;
 			String sql = "select f.title, ii.media_condition from film f join inventory_item ii on f.id = ii.film_id where f.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -290,4 +291,5 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		return inventory;
 	}
+
 }
