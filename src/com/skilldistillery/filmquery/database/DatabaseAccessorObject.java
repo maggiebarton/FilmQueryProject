@@ -204,8 +204,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	@Override
-	public Film findFilmLanguage(int filmId) {
-		Film film = null;
+	public Film findFilmLanguage(Film film) {
 		String language = "";
 
 		Connection conn;
@@ -216,12 +215,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			// = 13;
 			String sql = "select l.name from language l join film f on l.id = f.language_id where f.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, filmId);
+			stmt.setInt(1, film.getId());
 
 			ResultSet langResult = stmt.executeQuery();
 			if (langResult.next()) {
 				language = langResult.getString("name");
-				film = new Film();
 				film.setLanguage(language);
 			}
 			langResult.close();
@@ -235,8 +233,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	@Override
-	public Film findFilmCategory(int filmId) {
-		Film film = null;
+	public Film findFilmCategory(Film film) {
 		String category = "";
 
 		Connection conn;
@@ -247,12 +244,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			// join film f on f.id = fc.film_id where f.id = 13;
 			String sql = "select c.name from category c join film_category fc on fc.category_id = c.id join film f on f.id = fc.film_id where f.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, filmId);
+			stmt.setInt(1, film.getId());
 
 			ResultSet catResult = stmt.executeQuery();
 			if (catResult.next()) {
 				category = catResult.getString("name");
-				film = new Film();
 				film.setCategory(category);
 			}
 			catResult.close();

@@ -47,13 +47,7 @@ public class FilmQueryApp {
 
 	private void startUserInterface() {
 		System.out.println("Welcome to the Film Query App!");
-		do {
-			menu();
-			int choice = sc.nextInt();
-			sc.nextLine(); // flush
-
-			menuSwitch(choice);
-		} while (!quit);
+		mainMenu();
 
 	}
 
@@ -67,6 +61,17 @@ public class FilmQueryApp {
 		System.out.println("+---------------------------------+");
 		System.out.print("Choose: ");
 	}
+	
+	private void mainMenu() {
+		do {
+			menu();
+			int choice = sc.nextInt();
+			sc.nextLine(); // flush
+
+			menuSwitch(choice);
+		} while (!quit);
+		
+	}
 
 	private void menuSwitch(int choice) {
 		switch (choice) {
@@ -75,7 +80,7 @@ public class FilmQueryApp {
 			Film filmById = filmByID();
 			if (filmById == null) {
 				System.err.println("Film ID does not exist.");
-				startUserInterface();
+				
 			} else {
 				setFilmDetails(filmById);
 				System.out.println(filmById.simpleDisplay());
@@ -87,7 +92,7 @@ public class FilmQueryApp {
 			List<Film> films = filmsByKeyword();
 			if (films.size() == 0) {
 				System.err.println("No films matched your search.");
-				startUserInterface();
+		
 			} else {
 				for (Film film : films) {
 					setFilmDetails(film);
@@ -126,9 +131,9 @@ public class FilmQueryApp {
 	}
 
 	private void setFilmDetails(Film film) {
-		film.setLanguage(db.findFilmLanguage(film.getId()).getLanguage());
+		db.findFilmLanguage(film);
 		film.setActors(db.findActorsByFilmId(film.getId()));
-		film.setCategory(db.findFilmCategory(film.getId()).getCategory());
+		db.findFilmCategory(film);
 		film.setInventory(db.findFilmInventory(film.getId()));
 	}
 
@@ -142,7 +147,7 @@ public class FilmQueryApp {
 		switch (choice) {
 		case 1:
 			// return to main menu
-			startUserInterface();
+			mainMenu();
 			break;
 		case 2:
 			// see all film details
@@ -164,7 +169,7 @@ public class FilmQueryApp {
 		switch (choice) {
 		case 1:
 			// return to main menu
-			startUserInterface();
+			mainMenu();
 			break;
 		case 2:
 			// see all film details

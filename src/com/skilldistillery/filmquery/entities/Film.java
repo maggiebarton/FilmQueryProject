@@ -217,8 +217,10 @@ public class Film {
 	
 	public String inventoryList() {
 		String inventoryItems = "";
+		int counter = 1;
 		for (Film film : inventory) {
-			inventoryItems += film.getTitle() + " " + film.getCondition() + "\n";
+			inventoryItems += counter +". " + film.getTitle() + " " + film.getCondition() + "\n";
+			counter++;
 		}
 		return inventoryItems;
 	}
