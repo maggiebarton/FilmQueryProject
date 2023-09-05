@@ -75,25 +75,27 @@ public class FilmQueryApp {
 			Film filmById = filmByID();
 			if (filmById == null) {
 				System.err.println("Film ID does not exist.");
+				startUserInterface();
 			} else {
 				setFilmDetails(filmById);
 				System.out.println(filmById.simpleDisplay());
+				seeAllSingle(filmById);
 			}
-			seeAllSingle(filmById);
 			break;
 		case 2:
 			// look up film by keyword
 			List<Film> films = filmsByKeyword();
-			if (films == null) {
+			if (films.size() == 0) {
 				System.err.println("No films matched your search.");
+				startUserInterface();
 			} else {
 				for (Film film : films) {
 					setFilmDetails(film);
 					System.out.println(film.simpleDisplay());
 				}
 
+				seeAllList(films);
 			}
-			seeAllList(films);
 			break;
 		case 3:
 			// exit
