@@ -3,8 +3,6 @@ package com.skilldistillery.filmquery.entities;
 import java.util.List;
 import java.util.Objects;
 
-import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
-
 public class Film {
 	private int id;
 	private String title;
@@ -18,10 +16,18 @@ public class Film {
 	private String rating;
 	private String features;
 	private String language;
-
+	private String category;
+	private String condition;
+	private List<Film> inventory;
 	private List<Actor> actors;
 
 	public Film() {
+	}
+	
+	
+	public Film(String title, String condition) {
+		this.title = title;
+		this.condition = condition;
 	}
 
 	public Film(int id, String title, String desc, int releaseYear, int langId, int rentDur, double rate, int length,
@@ -161,11 +167,38 @@ public class Film {
 		this.language = language;
 	}
 
-	public String userDisplay() {
-		return title + " Year: " + releaseYear + " Rating: " + rating + " Language: " + language + "\n" + "Description: " + desc + "\nActors:\n" + actorList();
-				
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	
+
+	public List<Film> getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(List<Film> inventory) {
+		this.inventory = inventory;
+	}
+
+	public String simpleDisplay() {
+		return "| TITLE: " + title + " | YEAR: " + releaseYear + " | RATING: " + rating + " | LANGUAGE: " + language + " | CATEGORY: " + category +" |\n"
+				+ "| DESCRIPTION: " + desc + " |\nACTORS:\n" + actorList();
+
+	}
+
 	public String actorList() {
 		String actorNames = "";
 		for (Actor actor : actors) {
@@ -174,11 +207,20 @@ public class Film {
 		return actorNames;
 	}
 
-	@Override
-	public String toString() {
-		return "Film [id=" + id + ", title=" + title + ", desc=" + desc + ", releaseYear=" + releaseYear + ", langId="
-				+ langId + ", rentDur=" + rentDur + ", rate=" + rate + ", length=" + length + ", repCost=" + repCost
-				+ ", rating=" + rating + ", features=" + features + ", actors=" + actors + "]";
+	public String fullDetails() {
+		return "| FILM ID: " + id + " | TITLE: " + title + " | RELEASE YEAR: " + releaseYear + " | LANGUAGE ID: " + langId
+				+ " | RENTAL DURATION: " + rentDur + " | RENTAL RATE: " + rate + " | LENGTH: " + length
+				+ " |\n| REPLACEMENT COST: " + repCost + " | RATING: " + rating + " | SPECIAL FEATURES: " + features
+				+ " |\n| DESCRIPTION: " + desc + " |\nINVENTORY:\n" + inventoryList();
+
+	}
+	
+	public String inventoryList() {
+		String inventoryItems = "";
+		for (Film film : inventory) {
+			inventoryItems += film.getTitle() + " " + film.getCondition() + "\n";
+		}
+		return inventoryItems;
 	}
 
 	@Override

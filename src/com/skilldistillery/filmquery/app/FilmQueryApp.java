@@ -46,6 +46,7 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface() {
+		System.out.println("Welcome to the Film Query App!");
 		do {
 			menu();
 			int choice = sc.nextInt();
@@ -57,10 +58,13 @@ public class FilmQueryApp {
 	}
 
 	private void menu() {
-		System.out.println("Menu");
-		System.out.println("1. Look Up Film by ID");
-		System.out.println("2. Look Up Film(s) by Keyword");
-		System.out.println("3. Exit");
+		System.out.println("+---------------------------------+");
+		System.out.println("|              MENU               |");
+		System.out.println("+---------------------------------+");
+		System.out.println("| 1. Look Up Film by ID           |");
+		System.out.println("| 2. Look Up Film(s) by Keyword   |");
+		System.out.println("| 3. Exit                         |");
+		System.out.println("+---------------------------------+");
 		System.out.print("Choose: ");
 	}
 
@@ -72,10 +76,10 @@ public class FilmQueryApp {
 			if (filmById == null) {
 				System.err.println("Film ID does not exist.");
 			} else {
-				filmById.setLanguage(db.findFilmLanguage(filmById.getId()));
-				filmById.setActors(db.findActorsByFilmId(filmById.getId()));
-				System.out.println(filmById.userDisplay());
+				setFilmDetails(filmById);
+				System.out.println(filmById.simpleDisplay());
 			}
+			seeAllSingle(filmById);
 			break;
 		case 2:
 			// look up film by keyword
@@ -84,11 +88,12 @@ public class FilmQueryApp {
 				System.err.println("No films matched your search.");
 			} else {
 				for (Film film : films) {
-					film.setLanguage(db.findFilmLanguage(film.getId()));
-					film.setActors(db.findActorsByFilmId(film.getId()));
-					System.out.println(film.userDisplay());
+					setFilmDetails(film);
+					System.out.println(film.simpleDisplay());
 				}
+
 			}
+			seeAllList(films);
 			break;
 		case 3:
 			// exit
@@ -116,6 +121,60 @@ public class FilmQueryApp {
 
 		return db.findFilmsByKeyword(keyword);
 
+	}
+
+	private void setFilmDetails(Film film) {
+		film.setLanguage(db.findFilmLanguage(film.getId()).getLanguage());
+		film.setActors(db.findActorsByFilmId(film.getId()));
+		film.setCategory(db.findFilmCategory(film.getId()).getCategory());
+		film.setInventory(db.findFilmInventory(film.getId()));
+	}
+
+	private void seeAllSingle(Film film) {
+		System.out.println("1. Return to Main Menu");
+		System.out.println("2. View All Film Details");
+		System.out.print("Choose: ");
+		int choice = sc.nextInt();
+		sc.nextLine(); // flush
+
+		switch (choice) {
+		case 1:
+			// return to main menu
+			startUserInterface();
+			break;
+		case 2:
+			// see all film details
+			System.out.println(film.fullDetails());
+			break;
+		default:
+			System.err.println("Invalid Input. Please Try again.");
+			break;
+		}
+	}
+
+	private void seeAllList(List<Film> films) {
+		System.out.println("1. Return to Main Menu");
+		System.out.println("2. View All Film Details");
+		System.out.print("Choose: ");
+		int choice = sc.nextInt();
+		sc.nextLine(); // flush
+
+		switch (choice) {
+		case 1:
+			// return to main menu
+			startUserInterface();
+			break;
+		case 2:
+			// see all film details
+			for (Film film : films) {
+
+				System.out.println(film.fullDetails());
+			}
+			break;
+		default:
+			System.err.println("Invalid Input. Please Try again.");
+			break;
+		}
 	}
 
 }

@@ -31,7 +31,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, USER, PASS);
-
+//
 			String sql = "SELECT * FROM film WHERE id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -204,14 +204,16 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	@Override
-	public String findFilmLanguage(int filmId) {
+	public Film findFilmLanguage(int filmId) {
+		Film film = null;
 		String language = "";
 
 		Connection conn;
 		try {
 			conn = DriverManager.getConnection(URL, USER, PASS);
 
-			// select l.name from language l join film f on l.id = f.language_id where f.id = 13;
+			// select l.name from language l join film f on l.id = f.language_id where f.id
+			// = 13;
 			String sql = "select l.name from language l join film f on l.id = f.language_id where f.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -219,6 +221,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ResultSet langResult = stmt.executeQuery();
 			if (langResult.next()) {
 				language = langResult.getString("name");
+				film = new Film();
+				film.setLanguage(language);
 			}
 			langResult.close();
 			stmt.close();
@@ -227,6 +231,67 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 
-		return language;
+		return film;
+	}
+
+	@Override
+	public Film findFilmCategory(int filmId) {
+		Film film = null;
+		String category = "";
+
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASS);
+
+			// select c.name from category c join film_category fc on fc.category_id = c.id
+			// join film f on f.id = fc.film_id where f.id = 13;
+			String sql = "select c.name from category c join film_category fc on fc.category_id = c.id join film f on f.id = fc.film_id where f.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+
+			ResultSet catResult = stmt.executeQuery();
+			if (catResult.next()) {
+				category = catResult.getString("name");
+				film = new Film();
+				film.setCategory(category);
+			}
+			catResult.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return film;
+	}
+
+	@Override
+	public List<Film> findFilmInventory(int filmId) {
+		List<Film> inventory = new ArrayList<>();
+
+		Connection conn;
+		try {
+			conn = DriverManager.getConnection(URL, USER, PASS);
+
+			// select f.title, ii.media_condition from film f join inventory_item ii on f.id = ii.film_id where f.id = 13;
+			String sql = "select f.title, ii.media_condition from film f join inventory_item ii on f.id = ii.film_id where f.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+
+			ResultSet invResult = stmt.executeQuery();
+			while (invResult.next()) {
+				String title = invResult.getString("title");
+				String condition = invResult.getString("media_condition");
+				Film film = new Film(title, condition);
+				inventory.add(film);
+			}
+			invResult.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return inventory;
 	}
 }
